@@ -1,8 +1,9 @@
-package org.baumandm.monglorious;
+package org.baumandm.monglorious.java;
 
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import monglorious.core.MongloriousConnection;
+import org.baumandm.monglorious.Monglorious;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

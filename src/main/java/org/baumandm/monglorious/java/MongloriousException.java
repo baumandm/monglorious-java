@@ -1,4 +1,4 @@
-package org.baumandm.monglorious;
+package org.baumandm.monglorious.java;
 
 /**
  * Monglorious Exception base class.
