@@ -12,6 +12,7 @@ import org.hamcrest.Matcher;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,10 @@ public class MongloriousClientTest {
     }
 
     @Test
-    public void testMongloriousExecute() throws MongloriousException {
-        MongloriousClient m = new MongloriousClient("mongodb://localhost:27017/testdb");
-        Object results = m.execute("show dbs");
+    public void testMongloriousExecute() throws MongloriousException, IOException {
+        try(MongloriousClient m = new MongloriousClient("mongodb://localhost:27017/testdb")) {
+            Object results = m.execute("show dbs");
+        }
     }
 
     @Test
