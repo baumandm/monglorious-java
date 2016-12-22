@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Monglorious client. Creates and maintains a persistent connection until close() is called.
@@ -55,6 +56,15 @@ public class MongloriousClient implements Closeable {
         this.setDatabase((DB) connection.db);
     }
 
+    /**
+     * Executes a MongoDB query and returns the result.
+     *
+     * May return various types depending on the provided query.
+     *
+     * @param query The MongoDB query to execute
+     * @return Returns the result of the query.
+     * @throws MongloriousException
+     */
     public Object execute(final String query) throws MongloriousException {
         if (this.getMongoClient() == null) {
             LOG.error("This MongloriousClient instance has a null MongoClient; either a null value was passed to the constructor, or close() was called. Either way, the connection cannot be reopened and this instance cannot be used. A new MongloriousClient should be created.");
@@ -68,6 +78,34 @@ public class MongloriousClient implements Closeable {
         return results;
     }
 
+    /**
+     * Executes a MongoDB query and returns the result, cast to a particular Class.
+     *
+     * @param query The MongoDB query to execute.
+     * @param type The expected return type.
+     * @return Returns the result of the query.
+     * @throws MongloriousException
+     */
+    public <T extends Object> T execute(final String query, final Class<T> type) throws MongloriousException {
+        return type.cast(this.execute(query));
+    }
+
+    /**
+     * Executes a MongoDB query and returns the result, cast to a List&lt;T&gt;
+     *
+     * @param query The MongoDB query to execute
+     * @param type The expected returned List element type.
+     * @return Returns the result of the query.
+     * @throws MongloriousException
+     */
+    public <T extends Object> List<T> executeAsList(final String query, final Class<T> type) throws MongloriousException {
+        return (List<T>) this.execute(query);
+    }
+
+    /**
+     * Gets the MongoClient instance used to execute queries.s
+     * @return A MongoClient instance.
+     */
     public MongoClient getMongoClient() {
         return mongoClient;
     }
@@ -76,6 +114,10 @@ public class MongloriousClient implements Closeable {
         this.mongoClient = mongoClient;
     }
 
+    /**
+     * Gets the MongoDB database instance used to execute queries.
+     * @return A DB instance.
+     */
     public DB getDatabase() {
         return database;
     }
@@ -85,7 +127,9 @@ public class MongloriousClient implements Closeable {
     }
 
     /**
-     * Closes any open MongoDB connection. Once closed, this MongloriousClient instance cannot be used again.
+     * Closes any open MongoDB connection.
+     * Once closed, this MongloriousClient instance cannot be used again.
+     *
      * @throws IOException
      */
     @Override

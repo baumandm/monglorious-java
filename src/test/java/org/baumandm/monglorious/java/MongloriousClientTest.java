@@ -8,9 +8,11 @@ import org.baumandm.monglorious.java.MongloriousClient;
 import org.baumandm.monglorious.java.MongloriousException;
 import org.bson.Document;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -84,5 +86,40 @@ public class MongloriousClientTest {
         long actual = (Long) monglorious.execute("db.documents.count()");
 
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testTypedCount() throws MongloriousException {
+        MongoClient mongo = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
+        MongoDatabase database = mongo.getDatabase("testdb");
+        long expected = database.getCollection("documents").count();
+
+        MongloriousClient monglorious = new MongloriousClient("mongodb://localhost:27017/testdb");
+        long actual = monglorious.execute("db.documents.count()", Long.class);
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testExecuteAsListShowDbs() throws MongloriousException {
+        MongoClient mongo = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
+        MongoIterable<String> expected = mongo.listDatabaseNames();
+
+        MongloriousClient monglorious = new MongloriousClient("mongodb://localhost:27017/testdb");
+        List<String> actual = monglorious.executeAsList("show dbs", String.class);
+
+        for(String db : expected) {
+            Assert.assertTrue(actual.contains(db));
+        }
+    }
+
+    @Test(expected = ClassCastException.class)
+    public void testExecuteTypeError() throws MongloriousException {
+        MongoClient mongo = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
+        MongoDatabase database = mongo.getDatabase("testdb");
+        long expected = database.getCollection("documents").count();
+
+        MongloriousClient monglorious = new MongloriousClient("mongodb://localhost:27017/testdb");
+        String actual = monglorious.execute("db.documents.count()", String.class);
     }
 }
