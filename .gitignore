@@ -15,7 +15,6 @@ gradle-app.setting
 *.class
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
