@@ -15,7 +15,8 @@ Versioning of Monglorious-java is decoupled from Monglorious to allow iterating 
 
 ## Installation
 
-Download the latest uberjar release from GitHub and add it to your project.
+An Uberjar is attached to each [Release](https://github.com/baumandm/monglorious-java/releases) on GitHub, e.g. `monglorious-java-1.0.0-all.jar`.
+Download and import into your project.
 
 TODO: Upload to Maven Central.
 
