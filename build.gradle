@@ -1,5 +1,9 @@
-group 'org.baumandm'
-version '0.6.0-SNAPSHOT'
+plugins {
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
+}
+
+group 'io.github.baumandm'
+version '1.0.0'
 
 apply plugin: 'java'
 
